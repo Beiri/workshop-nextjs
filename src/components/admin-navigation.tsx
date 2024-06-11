@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { AdminNavigationLink } from './admin-navigation-link';
 import { AdminNavigationMobile } from './admin-navigation-mobile';
+import { ModeToggle } from './mode-toggle';
 
 export function AdminNavigation() {
   const links = [
@@ -47,6 +48,7 @@ export function AdminNavigation() {
             />
           </div>
         </form>
+        <ModeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">
