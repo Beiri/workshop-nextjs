@@ -13,6 +13,7 @@ import {
 import { AdminNavigationLink } from './admin-navigation-link';
 import { AdminNavigationMobile } from './admin-navigation-mobile';
 import { ModeToggle } from './mode-toggle';
+import { signOut } from '@/auth';
 
 export function AdminNavigation() {
   const links = [
@@ -62,7 +63,18 @@ export function AdminNavigation() {
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Support</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <form
+                action={async () => {
+                  'use server';
+                  await signOut();
+                }}
+              >
+                <button className="w-full text-start" type="submit">
+                  Logout
+                </button>
+              </form>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
