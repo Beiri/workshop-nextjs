@@ -7,7 +7,16 @@ import Link from 'next/link';
 import { AdminNavigationLink } from './admin-navigation-link';
 import { useState } from 'react';
 
-export function AdminNavigationMobile({ links }: { links: any }) {
+type AdminNavigationMobileProps = {
+  name: string;
+  href: string;
+}[];
+
+export function AdminNavigationMobile({
+  links,
+}: {
+  links: AdminNavigationMobileProps;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
