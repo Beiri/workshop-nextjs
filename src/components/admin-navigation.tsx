@@ -30,7 +30,7 @@ export function AdminNavigation() {
           <span className="sr-only">Acme Inc</span>
         </Link>
         {links.map((link) => (
-          <AdminNavigationLink href={link.href}>
+          <AdminNavigationLink key={link.href} href={link.href}>
             {link.name}
           </AdminNavigationLink>
         ))}

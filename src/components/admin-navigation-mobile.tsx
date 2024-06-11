@@ -38,6 +38,7 @@ export function AdminNavigationMobile({
           </Link>
           {links.map((link) => (
             <AdminNavigationLink
+              key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
             >
