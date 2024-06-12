@@ -2,6 +2,7 @@
 import { auth, signIn } from '@/auth';
 import prisma from '@/db/db';
 import { AuthError } from 'next-auth';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -59,4 +60,14 @@ export async function jobCreate(prevState: unknown, formData: FormData) {
   } else {
     redirect('/login');
   }
+}
+
+export async function jobDelete(id: number) {
+  await prisma.jobs.delete({
+    where: {
+      id,
+    },
+  });
+
+  revalidatePath('/dashboard/jobs');
 }
