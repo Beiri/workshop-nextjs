@@ -1,12 +1,10 @@
 import prisma from '@/db/db';
-import Image from 'next/image';
 import { MoreHorizontal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -29,6 +27,11 @@ import {
 import Link from 'next/link';
 import { Jobs } from '@prisma/client';
 import { jobDelete } from '@/lib/actions';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Jobs | Workshop Next.js',
+};
 
 export default async function JobsPage() {
   const jobs = await prisma.jobs.findMany();
@@ -82,7 +85,14 @@ export function JobsTable({ jobs }: { jobs: Array<Jobs> }) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            className="cursor-pointer"
+                            href={`/dashboard/jobs/${job.id}/edit`}
+                          >
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <form action={jobDeleteWithId}>
                             <button type="submit" className="w-full text-start">
