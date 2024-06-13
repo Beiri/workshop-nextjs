@@ -71,3 +71,32 @@ export async function jobDelete(id: number) {
 
   revalidatePath('/dashboard/jobs');
 }
+
+export async function jobUpdate(
+  id: number,
+  prevState: unknown,
+  formData: FormData
+) {
+  const parsedData = z
+    .object({
+      title: z.string().min(1, { message: 'Title field is required.' }),
+      content: z.string().min(1, { message: 'Content field is required.' }),
+      published: z.coerce.boolean(),
+    })
+    .safeParse(Object.fromEntries(formData.entries()));
+
+  if (!parsedData.success) {
+    return parsedData.error.formErrors.fieldErrors;
+  }
+
+  await prisma.jobs.update({
+    where: {
+      id,
+    },
+    data: {
+      ...parsedData.data,
+    },
+  });
+
+  redirect('/dashboard/jobs');
+}
