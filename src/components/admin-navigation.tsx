@@ -19,6 +19,7 @@ export function AdminNavigation() {
   const links = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Jobs', href: '/dashboard/jobs' },
+    { name: 'Posts', href: '/dashboard/posts' },
   ];
 
   return (
