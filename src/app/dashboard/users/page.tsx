@@ -25,63 +25,57 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import Link from 'next/link';
-import { Job } from '@prisma/client';
-import { jobDelete } from '@/lib/actions';
+import { Post, User } from '@prisma/client';
+import { jobDelete, postDelete, userDelete } from '@/lib/actions';
 import { Metadata } from 'next';
 import { AdminEmpty } from '@/components/admin-empty';
 
 export const metadata: Metadata = {
-  title: 'Jobs | Workshop Next.js',
+  title: 'Users | Workshop Next.js',
 };
 
-export default async function JobsPage() {
-  const jobs = await prisma.job.findMany();
+export default async function UsersPage() {
+  const users = await prisma.user.findMany();
 
-  if (jobs.length === 0) {
+  if (users.length === 0) {
     return (
       <AdminEmpty
-        title="You have no Jobs"
-        href="/dashboard/jobs/create"
-        buttonText="Add Job"
+        title="You have no Users"
+        href="/dashboard/users/create"
+        buttonText="Add User"
       />
     );
   }
 
-  return <JobsTable jobs={jobs} />;
+  return <UsersTable users={users} />;
 }
 
-export function JobsTable({ jobs }: { jobs: Array<Job> }) {
+export function UsersTable({ users }: { users: Array<User> }) {
   return (
     <Card>
       <CardHeader className="flex-row justify-between items-center">
-        <CardTitle>Jobs</CardTitle>
+        <CardTitle>Users</CardTitle>
         <Button>
-          <Link href="/dashboard/jobs/create">Create Job</Link>
+          <Link href="/dashboard/users/create">Create User</Link>
         </Button>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>Email</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {jobs.map((job) => {
-              const jobDeleteWithId = jobDelete.bind(null, job.id);
+            {users.map((user) => {
+              const userDeleteWithId = userDelete.bind(null, user.id);
 
               return (
-                <TableRow key={job.id}>
-                  <TableCell className="font-medium">{job.title}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">
-                      {job.published ? 'Active' : 'Draft'}
-                    </Badge>
-                  </TableCell>
+                <TableRow key={user.id}>
+                  <TableCell className="font-medium">{user.email}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -99,13 +93,13 @@ export function JobsTable({ jobs }: { jobs: Array<Job> }) {
                         <DropdownMenuItem asChild>
                           <Link
                             className="cursor-pointer"
-                            href={`/dashboard/jobs/${job.id}/edit`}
+                            href={`/dashboard/users/${user.id}/edit`}
                           >
                             Edit
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                          <form action={jobDeleteWithId}>
+                          <form action={userDeleteWithId}>
                             <button type="submit" className="w-full text-start">
                               Delete
                             </button>
@@ -122,7 +116,7 @@ export function JobsTable({ jobs }: { jobs: Array<Job> }) {
       </CardContent>
       <CardFooter>
         <div className="text-xs text-muted-foreground">
-          Showing <strong>1-10</strong> of <strong>{jobs.length}</strong> jobs
+          Showing <strong>1-10</strong> of <strong>{users.length}</strong> users
         </div>
       </CardFooter>
     </Card>

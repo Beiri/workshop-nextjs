@@ -1,6 +1,7 @@
 'use server';
 import { auth, signIn } from '@/auth';
 import prisma from '@/db/db';
+import { hash } from 'bcrypt';
 import { AuthError } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -48,7 +49,7 @@ export async function jobCreate(prevState: unknown, formData: FormData) {
     });
 
     if (user) {
-      await prisma.jobs.create({
+      await prisma.job.create({
         data: {
           ...parsedData.data,
           authorId: user.id,
@@ -63,7 +64,7 @@ export async function jobCreate(prevState: unknown, formData: FormData) {
 }
 
 export async function jobDelete(id: number) {
-  await prisma.jobs.delete({
+  await prisma.job.delete({
     where: {
       id,
     },
@@ -89,7 +90,7 @@ export async function jobUpdate(
     return parsedData.error.formErrors.fieldErrors;
   }
 
-  await prisma.jobs.update({
+  await prisma.job.update({
     where: {
       id,
     },
@@ -175,4 +176,77 @@ export async function postUpdate(
   });
 
   redirect('/dashboard/posts');
+}
+
+export async function usersCreate(prevState: unknown, formData: FormData) {
+  const parsedData = z
+    .object({
+      email: z.string().email(),
+      password: z
+        .string()
+        .min(6, { message: 'Password must contain at least 6 character(s)' }),
+    })
+    .safeParse(Object.fromEntries(formData.entries()));
+
+  if (!parsedData.success) {
+    return parsedData.error.formErrors.fieldErrors;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: parsedData.data.email,
+    },
+  });
+
+  if (user) {
+    throw new Error('User already exists');
+  }
+
+  await prisma.user.create({
+    data: {
+      email: parsedData.data.email,
+      password: await hash(parsedData.data.password, 10),
+    },
+  });
+
+  redirect('/dashboard/users');
+}
+
+export async function userDelete(id: number) {
+  await prisma.user.delete({
+    where: {
+      id,
+    },
+  });
+
+  revalidatePath('/dashboard/users');
+}
+
+export async function userUpdate(
+  id: number,
+  prevState: unknown,
+  formData: FormData
+) {
+  const parsedData = z
+    .object({
+      email: z.string().email(),
+      password: z.string().min(6),
+    })
+    .safeParse(Object.fromEntries(formData.entries()));
+
+  if (!parsedData.success) {
+    return parsedData.error.formErrors.fieldErrors;
+  }
+
+  await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      email: parsedData.data.email,
+      password: await hash(parsedData.data.password, 10),
+    },
+  });
+
+  redirect('/dashboard/users');
 }
