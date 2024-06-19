@@ -3,7 +3,7 @@ import prisma from '@/db/db';
 import { notFound } from 'next/navigation';
 
 export default async function JobsEdit({ params }: { params: { id: number } }) {
-  const job = await prisma.jobs.findUnique({
+  const job = await prisma.job.findUnique({
     where: {
       id: Number(params.id),
     },

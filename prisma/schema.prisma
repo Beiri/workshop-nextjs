@@ -15,7 +15,7 @@ model User {
   email     String  @unique
   password  String
   posts     Post[]
-  jobs      Jobs[]
+  jobs      Job[]
 }
 
 model Post {
@@ -28,7 +28,7 @@ model Post {
   author    User    @relation(fields: [authorId], references: [id])
 }
 
-model Jobs {
+model Job {
   id        Int     @id @default(autoincrement())
   title     String
   content   String?

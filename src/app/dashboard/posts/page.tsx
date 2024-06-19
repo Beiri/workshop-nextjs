@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { Post } from '@prisma/client';
 import { jobDelete, postDelete } from '@/lib/actions';
 import { Metadata } from 'next';
+import { AdminEmpty } from '@/components/admin-empty';
 
 export const metadata: Metadata = {
   title: 'Posts | Workshop Next.js',
@@ -35,6 +36,16 @@ export const metadata: Metadata = {
 
 export default async function PostsPage() {
   const posts = await prisma.post.findMany();
+
+  if (posts.length === 0) {
+    return (
+      <AdminEmpty
+        title="You have no Posts"
+        href="/dashboard/posts/create"
+        buttonText="Add Post"
+      />
+    );
+  }
 
   return <PostsTable posts={posts} />;
 }
