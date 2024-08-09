@@ -16,6 +16,7 @@ model User {
   password  String
   posts     Post[]
   jobs      Job[]
+  categories Category[]
 }
 
 model Post {
@@ -33,6 +34,14 @@ model Job {
   title     String
   content   String?
   published Boolean @default(false)
+
+  authorId  Int
+  author    User    @relation(fields: [authorId], references: [id])
+}
+
+model Category {
+  id        Int     @id @default(autoincrement())
+  name      String
 
   authorId  Int
   author    User    @relation(fields: [authorId], references: [id])

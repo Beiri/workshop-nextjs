@@ -7,11 +7,11 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { jobUpdate } from '@/lib/actions';
-import { Jobs } from '@prisma/client';
+import { Job } from '@prisma/client';
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
 
-export function EditJobForm({ job }: { job: Jobs }) {
+export function EditJobForm({ job }: { job: Job }) {
   const jobUpdateWithId = jobUpdate.bind(null, job.id);
   const [error, action] = useFormState(jobUpdateWithId, undefined);
 
