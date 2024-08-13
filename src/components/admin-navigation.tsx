@@ -21,6 +21,7 @@ export function AdminNavigation() {
     { name: 'Jobs', href: '/dashboard/jobs' },
     { name: 'Posts', href: '/dashboard/posts' },
     { name: 'Users', href: '/dashboard/users' },
+    { name: 'Categories', href: '/dashboard/categories' },
   ];
 
   return (

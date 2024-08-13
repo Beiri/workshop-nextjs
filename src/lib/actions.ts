@@ -250,3 +250,75 @@ export async function userUpdate(
 
   redirect('/dashboard/users');
 }
+
+export async function categoriesCreate(prevState: unknown, formData: FormData) {
+  const parsedData = z
+    .object({
+      name: z.string().min(1, { message: 'name field is required.' }),
+    })
+    .safeParse(Object.fromEntries(formData.entries()));
+
+  if (!parsedData.success) {
+    return parsedData.error.formErrors.fieldErrors;
+  }
+
+  const session = await auth();
+
+  if (session?.user?.email) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
+      },
+    });
+
+    if (user) {
+      await prisma.category.create({
+        data: {
+          ...parsedData.data,
+          authorId: user.id,
+        },
+      });
+
+      redirect('/dashboard/categories');
+    }
+  } else {
+    redirect('/login');
+  }
+}
+
+export async function categoryDelete(id: number) {
+  await prisma.category.delete({
+    where: {
+      id,
+    },
+  });
+
+  revalidatePath('/dashboard/categories');
+}
+
+export async function categoryUpdate(
+  id: number,
+  prevState: unknown,
+  formData: FormData
+) {
+  const parsedData = z
+    .object({
+      name: z.string().min(1, { message: 'name field is required.' }),
+    })
+    .safeParse(Object.fromEntries(formData.entries()));
+
+  if (!parsedData.success) {
+    return parsedData.error.formErrors.fieldErrors;
+  }
+
+  await prisma.category.update({
+    where: {
+      id,
+    },
+    data: {
+      ...parsedData.data,
+    },
+  });
+
+  redirect('/dashboard/categories');
+}
