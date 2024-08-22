@@ -18,11 +18,15 @@ export function EditUserForm({ user }: { user: User }) {
   return (
     <form action={action} className="space-y-4 max-w-screen-lg">
       <div className="space-y-2">
+        <Label htmlFor="name">User Name</Label>
+        <Input id="name" type="name" name="name" defaultValue={user.name} />
+        {error?.name && <FormError>{error.name}</FormError>}
+      </div>
+      <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" name="email" defaultValue={user.email} />
         {error?.email && <FormError>{error.email}</FormError>}
       </div>
-
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
         <Input id="password" type="password" name="password" />

@@ -22,7 +22,11 @@ export default function UsersCreate() {
           <Input id="email" type="email" name="email" />
           {error?.email && <FormError>{error.email}</FormError>}
         </div>
-
+        <div className="space-y-2">
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" type="name" name="name" />
+          {error?.name && <FormError>{error.name}</FormError>}
+        </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
           <Input id="password" type="password" name="password" />

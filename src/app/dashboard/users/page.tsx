@@ -63,6 +63,7 @@ export function UsersTable({ users }: { users: Array<User> }) {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>User Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
@@ -75,6 +76,7 @@ export function UsersTable({ users }: { users: Array<User> }) {
 
               return (
                 <TableRow key={user.id}>
+                  <TableCell className="font-medium">{user.name}</TableCell>
                   <TableCell className="font-medium">{user.email}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
