@@ -182,6 +182,9 @@ export async function usersCreate(prevState: unknown, formData: FormData) {
   const parsedData = z
     .object({
       email: z.string().email(),
+      name: z
+        .string()
+        .min(3, { message: 'Name must contain at least 3 character(s)' }),
       password: z
         .string()
         .min(6, { message: 'Password must contain at least 6 character(s)' }),
@@ -205,6 +208,7 @@ export async function usersCreate(prevState: unknown, formData: FormData) {
   await prisma.user.create({
     data: {
       email: parsedData.data.email,
+      name: parsedData.data.name,
       password: await hash(parsedData.data.password, 10),
     },
   });
@@ -230,6 +234,7 @@ export async function userUpdate(
   const parsedData = z
     .object({
       email: z.string().email(),
+      name: z.string().min(3),
       password: z.string().min(6),
     })
     .safeParse(Object.fromEntries(formData.entries()));
@@ -244,6 +249,7 @@ export async function userUpdate(
     },
     data: {
       email: parsedData.data.email,
+      name: parsedData.data.name,
       password: await hash(parsedData.data.password, 10),
     },
   });
